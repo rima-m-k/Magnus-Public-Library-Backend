@@ -9,8 +9,9 @@ const { search } = require("../controller/user/search");
 const { userProfile } = require("../controller/user/userProfile");
 const { libraryCard } = require("../controller/user/libraryCard");
 const { allEvents, fetchSingleEvent, bookEvent, payment } = require("../controller/user/Event");
-const { fetchBlog } = require("../controller/user/Blog");
+const { fetchBlog, fetchSingleBlog } = require("../controller/user/Blog");
 const { addReview, placeHold } = require("../controller/user/Book");
+
 router.route('/viewBooks').get(fetchBook)
 router.route(`/books/:id`).get(fetchSingleBook).patch( requireAuth ,addReview)
 router.route('/userSignup').post(userSignup).put(verifyOTP)
@@ -21,6 +22,7 @@ router.route('/profile').get(requireAuth,userProfile)
 router.route('/LibraryCardApplication').post(requireAuth,upload.single("file"),libraryCard)
 router.route('/allEvents').get(allEvents)
 router.route('/community').get(fetchBlog)
+router.route(`/communityBlogs/:id`).get(fetchSingleBlog)
 router.route(`/viewEvent/:id`).get(fetchSingleEvent)
 router.route('/bookEvent').post(requireAuth,bookEvent)
 router.route('/payment').post(payment)

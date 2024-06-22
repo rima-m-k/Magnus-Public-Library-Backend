@@ -14,7 +14,13 @@ const login = async (req, res) => {
             return jwt.sign({ id }, process.env.SECRET_KEY)
         }
         let staff = await STAFFDATA.findOne({ email: email }).populate("designationID");
-        if (staff.length === 0) { 
+        // await STAFFDATA.updateOne({email: email},{
+        //     $set:{
+        //       password:await bcrypt.hash('Login@123', 10)
+        //     }
+        //   })
+console.log(staff)
+        if (!staff) { 
             res.status(401).send({ message: "Email not found" });
         } else {
 
@@ -51,7 +57,7 @@ if(staff.isBlocked){
         }
     } catch (error) {
         console.log("Internal server error")
-        console.log(error);
+        // console.log(error);
         res.status(500).send({ message: "Internal server error" });
     }
 };

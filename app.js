@@ -1,5 +1,7 @@
 const express = require("express");
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
+
 const dotenv = require("dotenv");
 const corsMiddleware = require('./middlewares/cors');
 dotenv.config();
@@ -18,6 +20,12 @@ app.use(corsMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static("public"));
+app.use(session({
+    secret: 'magnus',
+    resave: false,
+    saveUninitialized: false
+}));
+
 // app.use(cookieParser());
 
 

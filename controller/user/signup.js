@@ -2,7 +2,7 @@ const USERDATA = require("../../model/userSchema");
 const bcrypt = require("bcrypt");
 const { sendOTP } = require("../../OTP_verification/OTP_verification");
 const jwt = require("jsonwebtoken");
-
+let OTPglobal
 async function userSignup(req, res) {
   try {
     if (req.body.name && req.body.email && req.body.password && req.body.cpassword) {
@@ -17,7 +17,7 @@ async function userSignup(req, res) {
       } else {
         //send otp
         const OTP = await sendOTP(req.body.email);
-        req.session.OTP = OTP;
+        OTPglobal = OTP;
         res.status(200).send({ message: "OTP sent successfully" })
 
 
@@ -51,14 +51,16 @@ async function verifyOTP(req, res) {
     console.log(docNo, "doc no")
     // let cardNumber = 10000 + docNo
     // Check if the received OTP is valid
-    if (req.body.otp === req.session.OTP) {
+    console.log(req.body.otp)
+    console.log(OTPglobal)
+    if (req.body.otp === OTPglobal) {
       // Create a new user
       const user = new USERDATA({
         name: req.body.name,
         phone: req.body.phone,
         email: req.body.email,
         password: await bcrypt.hash(req.body.password, 10),
-        index: docNo+1
+        index: docNo + 1
       });
 
       const savedUser = await user.save();

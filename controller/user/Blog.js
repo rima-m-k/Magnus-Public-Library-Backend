@@ -12,6 +12,18 @@ async function fetchBlog(req,res) {
     }
 }
 
+async function fetchSingleBlog(req,res) {
+    try {
+         const blog = await BLOG.find({_id:req.params.id}).populate("staffId userId")
+         res.json(blog)
+    } catch (error) {
+        // console.log(error)
+        console.log("Internal server error")
+        res.status(500).send({message: "Internal server error"}); 
+         
+    }
+}
 module.exports ={
-    fetchBlog
+    fetchBlog,
+    fetchSingleBlog
 }
